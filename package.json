@@ -1,0 +1,31 @@
+{
+  "name": "mongo-scraper",
+  "version": "0.0.1",
+  "description": "Mongo scraper exercise for UNCRAL",
+  "main": "server.js",
+  "scripts": {
+    "start": "babel-node ./server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scegad/mongo-scraper.git"
+  },
+  "author": "Adrian Schmitz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/scegad/mongo-scraper/issues"
+  },
+  "homepage": "https://github.com/scegad/mongo-scraper#readme",
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "body-parser": "^1.18.2",
+    "cheerio": "^1.0.0-rc.2",
+    "dotenv": "^5.0.0",
+    "express": "^4.16.2",
+    "express-handlebars": "^3.0.0",
+    "mongoose": "^5.0.4",
+    "request": "^2.83.0"
+  }
+}
