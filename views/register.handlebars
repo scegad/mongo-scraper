@@ -1,0 +1,26 @@
+<h1>Register an account</h1>
+
+<form id="login-form">
+  <label for="username"><b>Username</b></label>
+  <input type="text" placeholder="Enter Username" name="username" required>
+  <label for="password"><b>Password</b></label>
+  <input type="password" placeholder="Enter Password" name="password" required>
+  <button id="login-submit" type="submit">Login</button>
+</form>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $("#login-form").on('submit', function(event) {
+      event.preventDefault();
+      const username = $("input[name='username']").val();
+      const password = $("input[name='password']").val();
+      $.ajax("/register", {
+      type: "POST",
+      data: { username: username, password: password },
+      success: function(response){
+          window.location.href = '/';
+      }
+      });
+    });
+  });
+</script>
