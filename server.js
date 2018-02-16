@@ -16,7 +16,7 @@ const app = express();
 app.use(express.static("public"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
-app.use(session({ secret: process.env.SESSIONS_SECRET }));
+app.use(session({ secret: process.env.SESSIONS_SECRET, resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
 app.use(passport.session());
 

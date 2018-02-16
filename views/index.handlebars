@@ -1,91 +1,69 @@
-<h1>Mongo Scraper</h1>
-
-<ul>
-  {{#each plans}}
-  <li>
-    <p>
-      {{this.id}}. {{this.plan}}
-
-      <button data-planid="{{this.id}}" class="delplan">Delete Plan!</button>
-    </p>
-  </li>
-  {{/each}}
-</ul>
-
-<h2>Create a Plan</h2>
-<form id="createplan" class="button-size">
-  <textarea type="text" name="plan"></textarea>
-  <button type="submit">Save Plan!</button>
-</form>
-
-<h2>Update a Plan</h2>
-<form id="updateplan" class="button-size">
-  <select name="id">
-		{{#each plans}}
-			<option value="{{this.id}}">{{this.plan}}</option>
-		{{/each}}
-	</select>
-  <textarea type="text" name="plan" placeholder="plan"></textarea>
-  <button type="submit">Update Plan!</button>
-</form>
+{{#if user}}
+  <div class="row">
+    <div class="col s12">
+    <table id="articles-table", class="highlight">
+      <thead>
+        <tr>
+          <th>Headline</th>
+          <th>Link</th>
+          <th class="center-align">Saved</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    </div>
+  </div>
+{{/if}}
 
 <script type="text/javascript">
-  $(".delplan").on("click", function(event) {
-    var id = $(this).data("planid");
 
-    // Send the DELETE request.
-    $.ajax("/todos/" + id, {
-      type: "DELETE"
-    }).then(
-      function() {
-        console.log("deleted id ", id);
-        // Reload the page to get the updated list
-        location.reload();
-      }
-    );
-  });
+  $(document).ready(() => {
 
-  $("#createplan").on("submit", function(event) {
-    // Make sure to preventDefault on a submit event.
-    event.preventDefault();
+    const articlesTableBody = $('#articles-table tbody');
 
-    var newPlan = {
-      plan: $("#createplan [name=plan]").val().trim()
-    };
+    articlesTableBody.on('click', "tr" , (event) => {
+      const articleId = $(event.currentTarget).attr("data-article-id");
+      const articleUrl = $(event.currentTarget).attr("data-article-url");
+      $(`#preview-${articleId} .modal-content`).append($("<iframe>", {
+        src: articleUrl,
+        width: "100%",
+        height: "100%",
+        frameborder: "0"
+      }));
+      $(`#preview-${articleId}`).modal('open');
+    });
 
-    // Send the POST request.
-    $.ajax("/todos", {
+    $.ajax("/api/scrape", {
       type: "POST",
-      data: newPlan
-    }).then(
-      function() {
-        console.log("created new plan");
-        // Reload the page to get the updated list
-        location.reload();
+      data: {},
+      success: (response) => {
+        response.forEach((articleData, idx) => {
+          console.log("Article Data: " + JSON.stringify(articleData));
+          const newPreviewModal = (
+            $("<div>", { id: `preview-${idx}`, class: "modal modal-fixed-footer" }).append([
+              $("<div>", { class: "modal-content" }).append([
+                $("<h5>", { text: `Article Preview: ${articleData.title}` })
+              ]),
+              $("<div>", { class: "modal-footer" }).append([
+                $("<a>", {href: articleData.link, text: "Full Article", target: "_blank"})
+              ])
+            ])
+          );
+          const newTableRow = (
+            $("<tr>", { 'class': 'article', 'data-article-id': idx, 'data-article-url': articleData.link }).append([
+              $("<td>", { text: articleData.title }),
+              $("<td>").append($("<a>", { text: "Link", href: articleData.link })),
+              $("<td>", {class: "center-align"}).append($("<i>", { class: "material-icons", text: "star_outline"})),
+              newPreviewModal
+            ])
+          );
+          newTableRow.appendTo(articlesTableBody);
+          $('.modal').modal();
+        })
+      },
+      error: (response) => {
+        return;
       }
-    );
-  });
-
-  $("#updateplan").on("submit", function(event) {
-    // Make sure to preventDefault on a submit event.
-    event.preventDefault();
-
-    var id = $("[name=id]").val().trim();
-
-    var updatedPlan = {
-      plan: $("#updateplan [name=plan]").val().trim()
-    };
-
-    // Send the PUT request.
-    $.ajax("/todos/" + id, {
-      type: "PUT",
-      data: updatedPlan
-    }).then(
-      function() {
-        console.log("updated id ", id);
-        // Reload the page to get the updated list
-        location.reload();
-      }
-    );
+    });
   });
 </script>
