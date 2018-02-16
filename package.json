@@ -4,7 +4,8 @@
   "description": "Mongo scraper exercise for UNCRAL",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js --exec babel-node"
+    "start": "babel-node server.js",
+    "dev": "nodemon server.js --exec babel-node"
   },
   "repository": {
     "type": "git",
