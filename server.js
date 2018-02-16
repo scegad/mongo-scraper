@@ -28,7 +28,8 @@ app.set("view engine", "handlebars");
 app.use('/', router.main);
 app.use('/api', router.api);
   
-// Listen on port 3000
-app.listen(3000, function() {
-  console.log("App running on port 3000!");
+// Listen on port 3000 when not in production
+const PORT = process.env.PORT || 3000
+app.listen(PORT, function() {
+  console.log(`App listening on port ${PORT}.`);
 });
