@@ -6,4 +6,4 @@ import mongoose from 'mongoose';
 mongoose.Promise = Promise;
 mongoose.connect(process.env.MONGODB_URI);
 
-export default dbConfig;
+export default {};
