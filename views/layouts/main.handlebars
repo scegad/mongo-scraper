@@ -16,7 +16,7 @@
         <a href="/" class="brand-logo">Mongo-Scraper</a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
           {{#if user}}
-            <li><a href="/logout">Log out</a></li>
+            <li><a id="logout" href="#logout">Log out</a></li>
           {{else}}
             <li><a href="/login">Log in</a></li>
           {{/if}}
@@ -29,3 +29,16 @@
   </div>
 </body>
 </html>
+
+<script type="text/javascript">
+$(document).ready(() => {
+  $("#logout").on('click', () => {
+    $.ajax("/logout", {
+      type: 'POST',
+      success: (response) => {
+          window.location.href = '/';
+      }
+    })
+  });
+});
+</script>
