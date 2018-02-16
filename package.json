@@ -26,6 +26,7 @@
     "express": "^4.16.2",
     "express-handlebars": "^3.0.0",
     "express-session": "^1.15.6",
+    "farmhash": "^2.0.5",
     "mongoose": "^5.0.4",
     "nodemon": "^1.15.0",
     "passport": "^0.4.0",

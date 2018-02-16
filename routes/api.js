@@ -1,4 +1,5 @@
 import cheerio from 'cheerio';
+import farmhash from 'farmhash';
 import request from 'request';
 
 import { Router } from 'express';
@@ -37,13 +38,18 @@ router.delete("/articles/:id", function (req, res) {
 router.post("/scrape", function (req, res) {
   request('https://news.ycombinator.com/', function(error, response, body) {
     const $ = cheerio.load(body);
-    const stories = [];
     $(".storylink").each((storyId, story) => {
-      const title = $(story).text();
-      const link = $(story).attr("href");
-      stories.push({ title: title, link: link });
+      const articleTitle = $(story).text();
+      const articleLink = $(story).attr("href");
+      const articleBody = "";
+      const fingerprint = farmhash.hash32(articleTitle + articleLink);
+      Article.findOne({ fingerprint: fingerprint }).then((result) => {
+        if (!result) {
+          Article.create({ title: articleTitle, link: articleLink, body: articleBody, fingerprint: fingerprint });
+        }
+      });
     });
-    res.json(stories);
+    res.status(200).end();
   });
 });
 

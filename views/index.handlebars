@@ -34,8 +34,11 @@
     });
 
     $.ajax("/api/scrape", {
-      type: "POST",
-      data: {},
+      type: "POST"
+    });
+
+    $.ajax("/api/articles", {
+      type: "GET",
       success: (response) => {
         response.forEach((articleData, idx) => {
           console.log("Article Data: " + JSON.stringify(articleData));

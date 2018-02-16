@@ -6,10 +6,21 @@ const ArticleSchema = new mongoose.Schema({
     trim: true,
     required: "Article title is Required"
   },
+  link: {
+    type: String,
+    trim: true,
+    required: "Article link is Required"
+  },
   body: {
     type: String,
     trim: true,
-    required: "Article body is Required"
+    required: false
+  },
+  fingerprint: {
+    type: String,
+    trim: true,
+    required: false,
+    index: true
   },
   dateSaved: {
     type: Date,
